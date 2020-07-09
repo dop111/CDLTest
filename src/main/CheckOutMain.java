@@ -49,7 +49,7 @@ public class CheckOutMain {
 				if (order.equals("checkout")) //stop shopping with checkout command
 					break;
 
-				Product product = productDatabase.getProduct(String.valueOf(order));
+				Product product = productDatabase.getProduct(order);
 				shoppingTrolley.addItem(product);
 
 			} catch (IOException e1) {
