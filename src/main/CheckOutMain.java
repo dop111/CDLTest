@@ -24,7 +24,7 @@ public class CheckOutMain {
 		System.out.println("Enter product to add to your shopping trolley.");
 		System.out.println("Available items: ");
 
-		//Printing Catalogue
+		// Printing Catalogue
 		System.out.printf("%-12s%-12s%-12s%-12s\n", "SKU", "Name", "Price", "Current Offer");
 		for (Entry<String, Product> e : productDatabase.getAllAvailableProducts()) {
 			Product product = e.getValue();
@@ -38,40 +38,42 @@ public class CheckOutMain {
 		}
 
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		
-		//Shopping
+
+		// Shopping
 		String order = "";
 		while (true) {
 			try {
 				System.out.println("\nProduct SKU to add (type \"checkout\" to stop):");
 				order = input.readLine();
 
-				if (order.equals("checkout")) //stop shopping with checkout command
+				if (order.equals("checkout")) // stop shopping with checkout command
 					break;
 
 				Product product = productDatabase.getProduct(order);
 				shoppingTrolley.addItem(product);
 
 			} catch (IOException e1) {
+				System.out.println("Error: An unexpected error occured.");
+				System.exit(1);// close application (should never happen in theory)
 			} catch (ProductNotFound e1) {
 				System.out.println("Error: No such product in the database. Please try again.\n");
 				continue;
 			}
 		}
 
-		//Printing Receipt
+		// Printing Receipt
 		TrolleyTotalCalculator totalCalculator = new TrolleyTotalCalculator(shoppingTrolley, productDatabase);
 		try {
 			System.out.println("Thank you for shopping with us!");
 			System.out.println("Your Receipt: ");
-			
-			
-			float total = totalCalculator.calculateTrolleyTotal(); //calculate trolley
-			
+
+			float total = totalCalculator.calculateTrolleyTotal(); // calculate trolley
+
 			System.out.printf("%-12s%-12s%-12s\n", "Product", "Quantity", "Applied Offer");
 			for (Entry<Product, ProductCounter> e : shoppingTrolley.getAllItemsInTrolley()) {
-				String appliedOffer = (totalCalculator.getOfferAppliedTo(e.getKey())==null)?"-":totalCalculator.getOfferAppliedTo(e.getKey());
-				System.out.printf("%-12s%-12s%-12s\n", e.getKey().getName(), e.getValue().getCount(), appliedOffer );
+				String appliedOffer = (totalCalculator.getOfferAppliedTo(e.getKey()) == null) ? "-"
+						: totalCalculator.getOfferAppliedTo(e.getKey());
+				System.out.printf("%-12s%-12s%-12s\n", e.getKey().getName(), e.getValue().getCount(), appliedOffer);
 			}
 			System.out.printf("Your total is: £%.2f", total);
 		} catch (InvalidItemInTrolley e1) {
