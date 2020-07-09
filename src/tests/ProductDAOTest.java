@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Iterator;
@@ -25,6 +26,7 @@ class ProductDAOTest {
 		productDatabase.addProduct("A", new Product("A", 0.23f, "A"));
 		productDatabase.addProduct("B", new Product("B", 0.23f, "B"));
 		productDatabase.addProduct("C", new Product("C", 0.23f, "C"));
+		productDatabase.addProduct("D", new Product("D", 0.23f, "D"));
 		productDatabase.addOffer("A offer", new Offer("A offer", 5, 1.23f));
 		productDatabase.addOffer("B offer", new Offer("B offer", 5, 1.23f));
 
@@ -162,7 +164,12 @@ class ProductDAOTest {
 			fail("Existing product offer not found!");
 		}
 
-		// get nonexisting offer
+		// get non existing offer
+		try {
+			Offer o = productDatabase.getProductOffer("D");
+			assertTrue(o==null);
+		} catch (ProductNotFound e) {
+		}
 	}
 
 	@Test
